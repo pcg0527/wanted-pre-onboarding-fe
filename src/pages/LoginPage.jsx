@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Image } from '../components';
 import { LoginInput } from '../components/login/LoginInput';
@@ -31,8 +31,34 @@ const LoginButton = styled.button`
 `;
 
 const LoginPage = () => {
-  const [emailValidity, setEmailValidity] = useState(false);
-  const [passwordValidity, setPasswordValidity] = useState(false);
+  const emailInput = useRef();
+  const passwordInput = useRef();
+  const [emailValidity, setEmailValidity] = useState(null);
+  const [passwordValidity, setPasswordValidity] = useState(null);
+  const [formValidity, setFormValidity] = useState(false);
+
+  // 유효성 검사에 활용할 정규식
+
+  const regPassword =
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
+
+  // 이메일, 패스워드 유효성이 바뀔 때 폼 전체 유효성을 확인
+  useEffect(() => {
+    if (emailValidity && passwordValidity) {
+      setFormValidity(true);
+    } else {
+      setFormValidity(false);
+    }
+  }, [emailValidity, passwordValidity]);
+
+  const emailValidityHandler = () => {
+    const target = emailInput.current.value.trim();
+    setEmailValidity(target.includes('@') && target.includes('.'));
+  };
+
+  const passwordValidityHandler = () => {
+    setPasswordValidity(regPassword.test(passwordInput.current.value.trim()));
+  };
 
   return (
     <Wrapper>
@@ -47,6 +73,8 @@ const LoginPage = () => {
           id="email"
           errorMessage="이메일 형식이 올바르지 않습니다"
           valid={emailValidity}
+          inputRef={emailInput}
+          validation={emailValidityHandler}
         />
         <LoginInput
           labelName="패스워드"
@@ -55,8 +83,16 @@ const LoginPage = () => {
           id="password"
           errorMessage="패스워드 형식이 올바르지 않습니다"
           valid={passwordValidity}
+          inputRef={passwordInput}
+          validation={passwordValidityHandler}
         />
-        <LoginButton>로그인</LoginButton>
+        <LoginButton
+          type="submit"
+          disabled={!formValidity}
+          isActive={formValidity}
+        >
+          로그인
+        </LoginButton>
       </FormGroup>
     </Wrapper>
   );

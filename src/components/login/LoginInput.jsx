@@ -24,7 +24,7 @@ const Label = styled.label`
 const ErrorMessage = styled.p`
   font-size: 1.2rem;
   color: red;
-  visibility: ${(props) => (props.valid ? 'hidden' : 'visible')};
+  visibility: ${(props) => (props.valid === false ? 'visible' : 'hidden')};
 `;
 
 const LoginInput = ({
@@ -34,11 +34,19 @@ const LoginInput = ({
   id,
   errorMessage,
   valid,
+  inputRef,
+  validation,
 }) => {
   return (
     <Wrapper>
       <Label htmlFor={id}>{labelName}</Label>
-      <Input id={id} type={type} placeholder={placeholder} />
+      <Input
+        onBlur={validation}
+        ref={inputRef}
+        id={id}
+        type={type}
+        placeholder={placeholder}
+      />
       <ErrorMessage valid={valid}>{errorMessage}</ErrorMessage>
     </Wrapper>
   );

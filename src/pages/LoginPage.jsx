@@ -38,7 +38,6 @@ const LoginPage = () => {
   const [formValidity, setFormValidity] = useState(false);
 
   // 유효성 검사에 활용할 정규식
-
   const regPassword =
     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
 

@@ -41,7 +41,7 @@ const LoginInput = ({
     <Wrapper>
       <Label htmlFor={id}>{labelName}</Label>
       <Input
-        onBlur={validation}
+        onChange={validation}
         ref={inputRef}
         id={id}
         type={type}

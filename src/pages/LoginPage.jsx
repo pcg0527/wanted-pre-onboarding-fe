@@ -30,7 +30,7 @@ const LoginButton = styled.button`
   padding: 1rem;
 `;
 
-const LoginPage = () => {
+const LoginPage = ({ onLogin }) => {
   const emailInput = useRef();
   const passwordInput = useRef();
   const [emailValidity, setEmailValidity] = useState(null);
@@ -59,12 +59,19 @@ const LoginPage = () => {
     setPasswordValidity(regPassword.test(passwordInput.current.value.trim()));
   };
 
+  const onLoginHandler = (e) => {
+    e.preventDefault();
+    localStorage.setItem('email', emailInput.current.value);
+    localStorage.setItem('password', passwordInput.current.value);
+    onLogin();
+  };
+
   return (
     <Wrapper>
       <Header>
         <Image src="/images/logo.png" />
       </Header>
-      <FormGroup>
+      <FormGroup onSubmit={onLoginHandler}>
         <LoginInput
           labelName="이메일"
           placeholder="예) pcg0527@naver.com"
